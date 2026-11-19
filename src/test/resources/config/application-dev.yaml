@@ -1,0 +1,15 @@
+# Окружение dev. Выбор окружения: mvn test -Denv=dev (по умолчанию)
+ui:
+  baseUrl: https://www.saucedemo.com
+  user: standard_user
+  password: secret_sauce
+
+api:
+  baseUrl: https://restful-booker.herokuapp.com
+  user: admin
+  password: password123
+
+browser:
+  name: chrome
+  headless: true
+  timeoutMs: 15000

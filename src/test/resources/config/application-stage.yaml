@@ -1,0 +1,12 @@
+# Окружение stage: mvn test -Denv=stage
+# Логины и пароли приходят из CI secrets: UI_USER, UI_PASSWORD, API_USER, API_PASSWORD
+ui:
+  baseUrl: https://www.saucedemo.com
+
+api:
+  baseUrl: https://restful-booker.herokuapp.com
+
+browser:
+  name: chrome
+  headless: true
+  timeoutMs: 30000
