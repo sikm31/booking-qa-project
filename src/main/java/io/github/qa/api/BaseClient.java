@@ -34,8 +34,8 @@ public abstract class BaseClient {
                         .setConfig(RestAssuredConfig.config().httpClient(HttpClientConfig.httpClientConfig()
                                 .setParam("http.connection.timeout", timeout)
                                 .setParam("http.socket.timeout", timeout)))
-                        .addFilter(new AllureRestAssured())   // запрос и ответ попадают в отчёт
-                        .addFilter(new ErrorLoggingFilter())  // в консоль пишутся только ошибки
+                        .addFilter(new AllureRestAssured())
+                        .addFilter(new ErrorLoggingFilter())
                         .build());
     }
 }

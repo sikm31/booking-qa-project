@@ -7,12 +7,6 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Конфигурация по окружениям из config/application-{env}.yaml.
- * Ключи пишутся через точку по вложенности YAML: "ui.baseUrl", "browser.headless".
- * Приоритет: системное свойство (-Dui.baseUrl=...) → переменная окружения (UI_BASEURL) → YAML-файл.
- * Окружение выбирается через -Denv=dev|stage (по умолчанию dev).
- */
 public final class Config {
 
     private static final String ENV = System.getProperty("env", "dev");
