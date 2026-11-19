@@ -1,6 +1,6 @@
 # booking-qa-project
 
-Фреймворк автотестов для UI и API на Java: **Playwright + REST Assured + JUnit 5 + Allure**.
+Фреймворк автотестов для UI и API на Java: **Playwright + REST Assured + JUnit 6 + Allure**.
 
 Тестируемые демо-приложения:
 - UI: [SauceDemo](https://www.saucedemo.com), интернет-магазин
@@ -13,11 +13,11 @@
 | Язык и сборка | Java 17+, Maven |
 | UI | Playwright for Java (системный Google Chrome) |
 | API | REST Assured + Jackson (модели на records) |
-| Раннер | JUnit 5 (параллельный запуск, параметризованные тесты) |
+| Раннер | JUnit 6 (параллельный запуск, параметризованные тесты) |
 | Проверки | AssertJ, web-first assertions Playwright |
 | Тестовые данные | Datafaker, CSV для data-driven |
 | Моки | WireMock |
-| Окружение | Testcontainers (PostgreSQL) |
+| БД | PostgreSQL в Docker Compose, Spring Boot (`JdbcTemplate`) |
 | Конфиги | YAML по окружениям |
 | Отчёты | Allure (шаги, скриншоты, Playwright trace, HTTP-логи) |
 | CI | GitHub Actions + GitHub Pages |
@@ -36,11 +36,12 @@ src/test/java/io/github/qa/
 ├── ui/        UI-тесты (smoke, e2e, data-driven по CSV)
 ├── api/       CRUD, идемпотентность PUT, 403 без токена
 ├── mock/      проверки клиента на WireMock
-└── db/        Testcontainers + PostgreSQL
+└── db/        PostgreSQL (docker-compose.yml)
 
 src/test/resources/
 ├── config/application-dev.yaml, application-stage.yaml
 ├── data/login_negative.csv
+├── application.yaml              Spring Boot: подключение к PostgreSQL
 └── junit-platform.properties     параллельность, случайный порядок
 ```
 
@@ -65,7 +66,14 @@ mvn allure:serve                          # открыть отчёт в бра�
 mvn exec:java -Dexec.args="install firefox"
 ```
 
-Тесты в `db/` требуют Docker. Если Docker недоступен, они пропускаются.
+Тесты в `db/` работают с PostgreSQL из `docker-compose.yml`. Перед запуском поднимите базу:
+```bash
+docker compose up -d --wait               # PostgreSQL 17 на localhost:55432 (booking / qa / qa)
+mvn test -Dgroups=db
+docker compose down                       # остановить
+```
+Тесты БД запускаются через `@SpringBootTest`: параметры подключения задаются в `src/test/resources/application.yaml` (`spring.datasource.*`) и переопределяются переменными `DB_URL`, `DB_USER`, `DB_PASSWORD`.
+Если порт 55432 занят: `DB_PORT=55433 docker compose up -d --wait` и `DB_URL=jdbc:postgresql://localhost:55433/booking mvn test -Dgroups=db`.
 
 ## Конфигурация
 
@@ -88,7 +96,7 @@ mvn exec:java -Dexec.args="install firefox"
 
 ## Параллельность и стабильность
 
-- JUnit 5 запускает тесты параллельно (по умолчанию 4 потока, настраивается через `-Dthreads`).
+- JUnit 6 запускает тесты параллельно (по умолчанию 4 потока, настраивается через `-Dthreads`).
 - Playwright не потокобезопасен: у каждого потока свой `Browser`, а у каждого теста новый `BrowserContext`.
 - REST Assured настраивается на каждый запрос, без статического состояния.
 - Каждый тест создаёт свои уникальные данные и удаляет их за собой.
