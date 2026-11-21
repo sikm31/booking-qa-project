@@ -54,6 +54,7 @@ mvn test                                  # всё, кроме карантин�
 mvn test -Dgroups=smoke                   # только smoke
 mvn test -Dgroups=api                     # только API
 mvn test -Denv=stage -Dthreads=8          # другое окружение и число потоков
+ENV=stage mvn test                        # окружение через переменную (или SPRING_PROFILES_ACTIVE)
 mvn test -Dbrowser.headless=false         # с видимым браузером
 mvn test -Dbrowser.name=firefox           # другой браузер (сначала установите его, см. ниже)
 
@@ -80,8 +81,11 @@ docker compose down                       # остановить
 Файл `config/application-{env}.yaml`, ключи читаются через точку по вложенности (`ui.baseUrl`, `browser.headless`).
 Приоритет значений:
 1. Системное свойство: `-Dui.baseUrl=...`
-2. Переменная окружения: `UI_BASEURL`, `API_PASSWORD`
+2. Переменная окружения (relaxed binding как в Spring Boot): `UI_BASEURL` или `UI_BASE_URL`, `API_PASSWORD`
 3. YAML-файл
+
+В YAML можно использовать плейсхолдеры `${VAR}` и `${VAR:default}`, например `password: ${UI_PASSWORD:secret_sauce}`.
+Окружение: `-Denv` → `ENV` → `SPRING_PROFILES_ACTIVE` → `dev`.
 
 Секреты в репозиторий не коммитятся: в CI они приходят из GitHub Secrets.
 

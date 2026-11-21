@@ -42,7 +42,7 @@ class BookingRepositoryTest {
                 "INSERT INTO booking(firstname, totalprice) VALUES (?, ?) RETURNING id", Integer.class, "Ali", 500);
 
         Map<String, Object> row = jdbc.queryForMap("SELECT firstname, totalprice FROM booking WHERE id = ?", id);
-        assertThat(row).containsEntry("firstname", "Ali").containsEntry("totalprice", 500);
+        assertThat(row).containsEntry("firstname", "Ali").containsEntry("totalPrice", 500);
 
         jdbc.update("DELETE FROM booking WHERE id = ?", id);
     }

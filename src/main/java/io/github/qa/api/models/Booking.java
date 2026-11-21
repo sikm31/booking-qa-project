@@ -5,22 +5,18 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Booking(
-        String firstname,
-        String lastname,
-        Integer totalprice,
-        Boolean depositpaid,
-        BookingDates bookingdates,
-        String additionalneeds) {
+        String firstName,
+        String lastName,
+        Integer totalPrice,
+        Boolean depositPaid,
+        BookingDates bookingDates,
+        String additionalNeeds) {
 
-    public Booking withFirstname(String value) {
-        return new Booking(value, lastname, totalprice, depositpaid, bookingdates, additionalneeds);
+    public Booking withTotalPrice(Integer value) {
+        return new Booking(firstName, lastName, value, depositPaid, bookingDates, additionalNeeds);
     }
 
-    public Booking withTotalprice(Integer value) {
-        return new Booking(firstname, lastname, value, depositpaid, bookingdates, additionalneeds);
-    }
-
-    public static Booking patch(String firstname, String lastname) {
-        return new Booking(firstname, lastname, null, null, null, null);
+    public static Booking patch(String firstName, String lastName) {
+        return new Booking(firstName, lastName, null, null, null, null);
     }
 }

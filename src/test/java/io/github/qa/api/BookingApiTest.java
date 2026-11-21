@@ -35,7 +35,7 @@ class BookingApiTest {
 
     private CreatedBooking givenBooking() {
         CreatedBooking booking = steps.createBooking(TestData.booking());
-        created.add(booking.bookingid());
+        created.add(booking.bookingId());
         return booking;
     }
 
@@ -47,10 +47,10 @@ class BookingApiTest {
         Booking expected = TestData.booking();
 
         CreatedBooking created = steps.createBooking(expected);
-        this.created.add(created.bookingid());
+        this.created.add(created.bookingId());
 
-        assertThat(created.bookingid()).isPositive();
-        Booking actual = client.get(created.bookingid())
+        assertThat(created.bookingId()).isPositive();
+        Booking actual = client.get(created.bookingId())
                 .then().statusCode(200)
                 .extract().as(Booking.class);
         assertThat(actual).isEqualTo(expected);
@@ -60,8 +60,8 @@ class BookingApiTest {
     @Tag("regression")
     @DisplayName("PUT полностью заменяет бронирование и идемпотентен")
     void putReplacesAndIsIdempotent() {
-        int id = givenBooking().bookingid();
-        Booking replacement = TestData.booking().withTotalprice(777);
+        int id = givenBooking().bookingId();
+        Booking replacement = TestData.booking().withTotalPrice(777);
 
         for (int i = 0; i < 2; i++) {
             client.update(id, replacement, steps.token()).then().statusCode(200);
@@ -77,11 +77,11 @@ class BookingApiTest {
         CreatedBooking original = givenBooking();
         String newName = "Patched-" + TestData.uniqueSuffix();
 
-        client.partialUpdate(original.bookingid(), Booking.patch(newName, null), steps.token())
+        client.partialUpdate(original.bookingId(), Booking.patch(newName, null), steps.token())
                 .then().statusCode(200);
 
-        Booking actual = client.get(original.bookingid()).as(Booking.class);
-        assertThat(actual.firstname()).isEqualTo(newName);
+        Booking actual = client.get(original.bookingId()).as(Booking.class);
+        assertThat(actual.firstName()).isEqualTo(newName);
         assertThat(actual).usingRecursiveComparison().ignoringFields("firstname")
                 .isEqualTo(original.booking());
     }
@@ -90,7 +90,7 @@ class BookingApiTest {
     @Tag("regression")
     @DisplayName("После DELETE бронирование недоступно (404)")
     void deleteRemovesBooking() {
-        int id = givenBooking().bookingid();
+        int id = givenBooking().bookingId();
 
         client.delete(id, steps.token()).then().statusCode(201);
         created.remove(Integer.valueOf(id));
@@ -103,7 +103,7 @@ class BookingApiTest {
     @Severity(SeverityLevel.CRITICAL)
     @DisplayName("DELETE без токена запрещён (403)")
     void deleteWithoutTokenIsForbidden() {
-        int id = givenBooking().bookingid();
+        int id = givenBooking().bookingId();
 
         client.delete(id, null).then().statusCode(403);
         client.get(id).then().statusCode(200);
