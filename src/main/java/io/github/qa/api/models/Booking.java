@@ -1,16 +1,17 @@
 package io.github.qa.api.models;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record Booking(
-        String firstName,
-        String lastName,
-        Integer totalPrice,
-        Boolean depositPaid,
-        BookingDates bookingDates,
-        String additionalNeeds) {
+        @JsonProperty("firstname") String firstName,
+        @JsonProperty("lastname") String lastName,
+        @JsonProperty("totalprice") Integer totalPrice,
+        @JsonProperty("depositpaid") Boolean depositPaid,
+        @JsonProperty("bookingdates") BookingDates bookingDates,
+        @JsonProperty("additionalneeds") String additionalNeeds) {
 
     public Booking withTotalPrice(Integer value) {
         return new Booking(firstName, lastName, value, depositPaid, bookingDates, additionalNeeds);

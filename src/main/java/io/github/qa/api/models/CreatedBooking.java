@@ -1,4 +1,6 @@
 package io.github.qa.api.models;
 
-public record CreatedBooking(int bookingId, Booking booking) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record CreatedBooking(@JsonProperty("bookingid") int bookingId, Booking booking) {
 }

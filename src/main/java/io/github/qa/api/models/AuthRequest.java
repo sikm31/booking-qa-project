@@ -1,4 +1,6 @@
 package io.github.qa.api.models;
 
-public record AuthRequest(String userName, String password) {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public record AuthRequest(@JsonProperty("username") String userName, String password) {
 }

@@ -5,7 +5,7 @@ import io.qameta.allure.Step;
 
 public class LoginPage extends BasePage {
 
-    private final Locator username = page.getByTestId("userName");
+    private final Locator username = page.getByTestId("username");
     private final Locator password = page.getByTestId("password");
     private final Locator loginButton = page.getByTestId("login-button");
     private final Locator error = page.getByTestId("error");

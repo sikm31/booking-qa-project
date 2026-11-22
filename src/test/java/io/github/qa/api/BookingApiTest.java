@@ -82,7 +82,7 @@ class BookingApiTest {
 
         Booking actual = client.get(original.bookingId()).as(Booking.class);
         assertThat(actual.firstName()).isEqualTo(newName);
-        assertThat(actual).usingRecursiveComparison().ignoringFields("firstname")
+        assertThat(actual).usingRecursiveComparison().ignoringFields("firstName")
                 .isEqualTo(original.booking());
     }
 
